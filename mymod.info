@@ -1,0 +1,3 @@
+name = My Demo Module
+description = Creates  "Edit profile" tabs for users.
+core = 7.x
