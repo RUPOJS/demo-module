@@ -1,2 +1,2 @@
-It is a simple drupal module that will edit the selected fields if user-profiles. To make this module work go to Administration > Configuration >
+It is a simple drupal module that will edit the selected fields of user-profiles. To make this module work go to Administration > Configuration >
    People > Account settings > Manage fields and add the fields you want to edit.
