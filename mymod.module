@@ -1,7 +1,7 @@
 <?php
 
 function my_module_menu() {
-               $items = array();
+        $items = array();
 	$items[my_module/form] = array(
 	   'title' => t('My form'),
 	   'page callback' => 'my_module_form',
@@ -17,7 +17,7 @@ function my_module_menu() {
    }
    
    function my_module_my_form($form_state) {
-	    $form['name'] = array(
+	 $form['name'] = array(
           '#type' => 'fieldset',
           '#title' => t('Name'),
           '#collapsible' => TRUE,
