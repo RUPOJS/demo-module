@@ -1,98 +1,51 @@
 <?php
 
-/**
- * @file
- */
+function my_module_menu() {
+               $items = array();
+	$items[my_module/form] = array(
+	   'title' => t('My form'),
+	   'page callback' => 'my_module_form',
+	   'acess arguments' => array('access content'),
+	   'description' => t('My form'),
+	   'type' => MENU_CALLBACK,
+	   );
+	   return $items;
+   }
+   
+   function my_module_form() {
+	   return drupal_get_form('my_module_my_form');
+   }
+   
+   function my_module_my_form($form_state) {
+	    $form['name'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('Name'),
+          '#collapsible' => TRUE,
+          '#collapsed' => FALSE,
+         );
+         $form['name']['user'] = array(
+          '#type' => 'textfield',
+          '#title' => t('username'),
+          '#required' => TRUE,
+          '#default_value' => "username",
+          '#description' => "enter your username.",
+          '#size' => 20,
+          '#maxlength' => 20,
+         );
+         $form['file'] = array(
+          '#type' => 'file',
+          '#title' => t('Image'),
+          '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif'),
+         );
+         $form['submit'] = array(
+          '#type' => 'submit',
+          '#value' => 'Submit',
+         );
+         return $form;
+	 }
+	 
+   function my_module_my_form_submit($form, &$form_state) {
+        drupal_set_message(t('The form has been submitted.'));
+     }
 
-/**
- *  hook_menu().
- */
-function mymodule_menu() {
-               $type = 'profile';
-               if(!empty($items['user/%user/edit/'.$type])) {
-                     $edit = &$items['user/%user/edit-profile'];
-        
-                     $edit = array(
-                     'type' => MENU_LOCAL_TASK,
-                     'title' => $edit['Update Profile'],
-                     'page callback' => $edit['drupal_get_form'],
-                     'access callback' => '',
-                     'access arguments' =>  $edit[array(1)],
-                     'weight' => -5,
-                     'file path' => $edit[drupal_get_path(module,user)],
-                     );
-        
-               return $items;
-             }
-           }
-/**
- * hook_forms().
- */
-function edit_profile_forms() {
-  $forms['edit_profile_user_profile_form'] = array(
-    'callback' => 'user_profile_form',
-  );
-
-  return $forms;
-}
-
-function edit_profile_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id != 'edit_profile_user_profile_form' && $form['#user_category'] == 'account') {
-    foreach (array_keys(field_info_instances('user', 'user')) as $field_name) {
-      $form[$field_name]['#access'] = FALSE;
-    }
-  }
-}
-
-function edit_profile_form_edit_profile_user_profile_form_alter(&$form, &$form_state) {
-  $field_names = array_keys(field_info_instances('user', 'user'));
-  $form_fields_to_keep = array_merge($field_names, array('actions', 'form_build_id', 'form_token', 'form_id'));
-  foreach (element_children($form) as $key) {
-    if (!in_array($key, $form_fields_to_keep)) {
-      $form[$key]['#access'] = FALSE;
-    }
-  }
-  foreach (element_children($form['actions']) as $key) {
-    if ($key != 'submit') {
-      $form['actions'][$key]['#access'] = FALSE;
-    }
-  }
-}
-
-function edit_profile_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'form_alter' && isset($implementations['edit_profile'])) {
-    $group = $implementations['edit_profile'];
-    unset($implementations['edit_profile']);
-    $implementations['edit_profile'] = $group;
-  }
-}
-
-/**
- * Access callback 
- */
-function edit_profile_user_edit_access($account) {
-  if (!user_edit_access($account)) {
-    return FALSE;
-  }
-  if ($instances = field_info_instances('user', 'user')) {
-    foreach ($instances as $instance) {
-      $field = field_info_field($instance['field_name']);
-      if (field_access('edit', $field, $instance['entity_type'], $account)) {
-        return TRUE;
-      }
-    }
-  }
-
-  return FALSE;
-}
-
-/**
- * hook_admin_paths().
- */
-function edit_profile_admin_paths() {
-  $paths = array(
-    'user/*/edit-profile' => TRUE,
-  );
-
-  return $paths;
-}
+	
