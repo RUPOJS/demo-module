@@ -2,7 +2,7 @@
 
 function my_module_menu() {
         $items = array();
-	$items[my_module/form] = array(
+	$items['my_module/form'] = array(
 	   'title' => t('My form'),
 	   'page callback' => 'my_module_form',
 	   'acess arguments' => array('access content'),
