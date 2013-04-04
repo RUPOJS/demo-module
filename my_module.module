@@ -32,7 +32,13 @@ function my_module_menu() {
           '#size' => 20,
           '#maxlength' => 20,
          );
-         $form['file'] = array(
+         $form['image'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('profile picture'),
+          '#collapsible' => TRUE,
+          '#collapsed' => FALSE,
+         );
+         $form['image']['file'] = array(
           '#type' => 'file',
           '#title' => t('Image'),
           '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif'),
