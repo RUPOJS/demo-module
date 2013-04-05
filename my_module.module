@@ -1,13 +1,16 @@
 <?php
 
+
+
 function my_module_menu() {
-        $items = array();
+	$items = array();
 	$items['my_module/form'] = array(
 	   'title' => t('My form'),
 	   'page callback' => 'my_module_form',
 	   'acess arguments' => array('access content'),
 	   'description' => t('My form'),
 	   'type' => MENU_CALLBACK,
+	   'access callback' => TRUE,
 	   );
 	   return $items;
    }
@@ -16,42 +19,46 @@ function my_module_menu() {
 	   return drupal_get_form('my_module_my_form');
    }
    
-   function my_module_my_form($form_state) {
-	 $form['name'] = array(
-          '#type' => 'fieldset',
-          '#title' => t('Name'),
-          '#collapsible' => TRUE,
-          '#collapsed' => FALSE,
-         );
-         $form['name']['user'] = array(
+   function my_module_my_form($form, &$form_state) {
+	   
+         $form['name'] = array(
           '#type' => 'textfield',
           '#title' => t('username'),
           '#required' => TRUE,
-          '#default_value' => "username",
           '#description' => "enter your username.",
           '#size' => 20,
           '#maxlength' => 20,
          );
-         $form['image'] = array(
-          '#type' => 'fieldset',
-          '#title' => t('profile picture'),
-          '#collapsible' => TRUE,
-          '#collapsed' => FALSE,
-         );
-         $form['image']['file'] = array(
+         $form['picture'] = array(
           '#type' => 'file',
           '#title' => t('Image'),
           '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif'),
          );
          $form['submit'] = array(
           '#type' => 'submit',
-          '#value' => 'Submit',
+          '#value' => 'update your profile',
          );
          return $form;
 	 }
 	 
    function my_module_my_form_submit($form, &$form_state) {
-        drupal_set_message(t('The form has been submitted.'));
+	     global $user;
+	     $account = user_load($user -> uid);
+	     $image_path = 'picture://';
+	      $validators = array(
+          'file_validate_is_image' => array(),
+           );
+	     $file = new StdClass();
+          $file -> uid = $user -> uid;
+          $file->uri = $image_path;
+          $file = file_save_upload('picture', $validators);
+	     $new = array (
+	      'name' => $form_state['values']['name'],
+	      'picture' => $file,
+	      );
+	      user_save($account,$new );
+	    $message = 'You have updated your profile';
+        drupal_set_message(t($message));
      }
 
 	
