@@ -1,6 +1,20 @@
 <?php
 
+function my_module_block_info() {
+  $blocks = array();
+  $blocks['my_block'] = array(
+    'info' => t('My Custom Block'),
+  );
 
+  return $blocks;
+}
+function hook_block_view($delta = '') {
+    switch ($delta) {
+    case 'my_block':
+          $block['subject'] = t('My form');
+          $block['content'] = my_module_my_form();
+     }
+}
 
 function my_module_menu() {
 	$items = array();
